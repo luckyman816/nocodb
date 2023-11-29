@@ -1,0 +1,60 @@
+{
+  "name": "nocodb-root",
+  "description": "NocoDB Root",
+  "private": true,
+  "author": {
+    "name": "NocoDB Inc",
+    "url": "https://nocodb.com/"
+  },
+  "homepage": "https://github.com/nocodb/nocodb",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nocodb/nocodb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nocodb/nocodb/issues"
+  },
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@nuxt/kit": "^3.8.1",
+    "cypress": "^13.6.0",
+    "fs": "0.0.1-security",
+    "husky": "^8.0.0",
+    "lerna": "^7.0.2",
+    "xlsx": "^0.17.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm dlx lint-staged"
+    }
+  },
+  "lint-staged": {
+    "scripts/playwright/**/*.{ts,tsx,js,json}": [
+      "pnpm run lint:staged:playwright"
+    ]
+  },
+  "scripts": {
+    "bootstrap": "pnpm --filter=nocodb-sdk install && pnpm --filter=nocodb-sdk run build && pnpm --filter=nocodb --filter=nc-gui --filter=playwright install",
+    "start:frontend": "pnpm --filter=nc-gui run dev",
+    "start:backend": "pnpm --filter=nocodb run start",
+    "lint:staged:playwright": "cd ./tests/playwright; pnpm dlx lint-staged; cd -",
+    "start:mysql": "docker-compose -f ./tests/playwright/scripts/docker-compose-mysql-playwright.yml up -d",
+    "stop:mysql": "docker-compose -f ./tests/playwright/scripts/docker-compose-mysql-playwright.yml down",
+    "start:pg": "docker-compose -f ./tests/playwright/scripts/docker-compose-pg.yml up -d",
+    "stop:pg": "docker-compose -f ./tests/playwright/scripts/docker-compose-pg.yml down",
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm",
+    "install:local-sdk": "node scripts/installLocalSdk.js"
+  },
+  "pnpm": {
+    "overrides": {
+      "vue": "latest",
+      "typescript": "latest"
+    }
+  },
+  "dependencies": {
+    "jenesius-vue-modal": "^1.9.3",
+    "pnpm": "^8.10.5",
+    "vuetify": "^3.4.0"
+  }
+}
